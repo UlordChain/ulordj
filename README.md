@@ -1,10 +1,6 @@
-[![Build Status](https://travis-ci.org/bitcoinj/bitcoinj.png?branch=master)](https://travis-ci.org/bitcoinj/bitcoinj)   [![Coverage Status](https://coveralls.io/repos/bitcoinj/bitcoinj/badge.png?branch=master)](https://coveralls.io/r/bitcoinj/bitcoinj?branch=master) 
+### Welcome to ulordj
 
-[![Visit our IRC channel](https://kiwiirc.com/buttons/irc.freenode.net/bitcoinj.png)](https://kiwiirc.com/client/irc.freenode.net/bitcoinj)
-
-### Welcome to bitcoinj
-
-The bitcoinj library is a Java implementation of the Bitcoin protocol, which allows it to maintain a wallet and send/receive transactions without needing a local copy of Bitcoin Core. It comes with full documentation and some example apps showing how to use it.
+The ulordj library is a Java implementation of the Ulord protocol, which allows it to maintain a wallet and send/receive transactions without needing a local copy of Ulord Core. It comes with full documentation and some example apps showing how to use it.
 
 ### Technologies
 
@@ -37,7 +33,3 @@ Alternatively, just import the project using your IDE. [IntelliJ](http://www.jet
 ### Example applications
 
 These are found in the `examples` module.
-
-### Where next?
-
-Now you are ready to [follow the tutorial](https://bitcoinj.github.io/getting-started).
