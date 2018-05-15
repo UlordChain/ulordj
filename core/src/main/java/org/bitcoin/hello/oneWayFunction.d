@@ -1,4 +1,4 @@
 oneWayFunction.o oneWayFunction.d : oneWayFunction.c oneWayFunction.h my_time.h common.h \
- sha1.h sha256.h sha512.h sha3_256.h whirlpool.h ripemd160.h blake2s256.h \
- aes128.h des.h crc32.h hmac_md5.h rc4.h camellia128.h gost.h \
- haval5_256.h skein512_256.h
+ c_sha1.h c_sha256.h c_sha512.h c_sha3_256.h c_whirlpool.h c_ripemd160.h \
+ c_blake2s256.h c_aes128.h c_des.h c_crc32.h c_hmac_md5.h c_rc4.h \
+ c_camellia128.h c_gost.h c_haval5_256.h c_skein512_256.h
