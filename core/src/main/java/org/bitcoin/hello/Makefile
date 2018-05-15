@@ -6,7 +6,7 @@ INCLUDEFLAGS = -I"${JAVA_HOME}/include" -I"${JAVA_HOME}/include/linux"
 LDFLAGS = -fopenmp -lssl -lcrypto
 SRC_DIR = $(PWD)
 OBJS    = PoW.o c_hmac_md5.o c_aes128.o c_camellia128.o c_crc32.o c_gost.o c_ripemd160.o c_sha1.o c_sha3_256.o c_skein512_256.o c_blake2s256.o c_des.o c_haval5_256.o c_rc4.o c_sha256.o c_sha512.o c_whirlpool.o jtr_gost.o jtr_skein.o jtr_crc32.o jtr_haval.o blake2s.o keccak1600.o my_time.o common.o PoW.o oneWayFunction.o org_bitcoin_hello_CryptoHelloContext.o
-LIB_FILE = libCryptoHello.so
+LIB_FILE = libBitcoinjHello.so
 TARGETS = PoW $(LIB_FILE)
 
 .PHONY:all
@@ -16,7 +16,7 @@ PoW:main.o $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) 
 	# rm *.d *.o 
 
-libCryptoHello.so: $(OBJS)
+libBitcoinjHello.so: $(OBJS)
 	gcc -shared -o  $@ $^ -lssl -lcrypto
 	sudo cp $(LIB_FILE) /usr/lib
 	sudo ldconfig

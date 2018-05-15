@@ -7,7 +7,7 @@ public class CryptoHelloContext {
     static {
         try {
             //System.out.println(System.getProperty("java.library.path"));
-            System.loadLibrary("CryptoHello");
+            System.loadLibrary("BitcoinjHello");
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Native code library failed to load.\n" + e);
             System.exit(1);
