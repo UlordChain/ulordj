@@ -68,7 +68,7 @@ public class ForwardingService {
             params = RegTestParams.get();
             filePrefix = "forwarding-service-regtest";
         } else {
-            params = MainNetParams.get();
+            params = TestNet3Params.get();
             filePrefix = "forwarding-service";
         }
         // Parse the address given as the first parameter.
