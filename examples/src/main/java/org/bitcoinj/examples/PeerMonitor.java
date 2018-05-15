@@ -24,6 +24,7 @@ import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.utils.BriefLogFormatter;
 import com.google.common.collect.Lists;
 
@@ -63,7 +64,7 @@ public class PeerMonitor {
     }
 
     private void setupNetwork() {
-        params = MainNetParams.get();
+        params = TestNet3Params.get();
         peerGroup = new PeerGroup(params, null /* no chain */);
         peerGroup.setUserAgent("PeerMonitor", "1.0");
         peerGroup.setMaxConnections(4);

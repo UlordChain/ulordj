@@ -524,9 +524,9 @@ public abstract class NetworkParameters {
     public static enum ProtocolVersion {
         MINIMUM(70000),
         PONG(60001),
-        BLOOM_FILTER(70000),
-        WITNESS_VERSION(70012),
-        CURRENT(70012);
+        BLOOM_FILTER(70201),
+        WITNESS_VERSION(70103),
+        CURRENT(70206);
 
         private final int bitcoinProtocol;
 

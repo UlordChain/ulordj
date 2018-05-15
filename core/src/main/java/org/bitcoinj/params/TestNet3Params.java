@@ -61,8 +61,8 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
 
         dnsSeeds = new String[] {
-                "node.ulord.one",
-                "10.221.153.180",
+                //"node.ulord.one",
+                //"10.221.153.180",
                 "119.27.188.44"
         };
         addrSeeds = null;

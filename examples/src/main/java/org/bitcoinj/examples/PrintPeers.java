@@ -25,7 +25,7 @@ import org.bitcoinj.core.VersionMessage;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscoveryException;
 import org.bitcoinj.net.NioClientManager;
-import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.utils.BriefLogFormatter;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
@@ -58,7 +58,7 @@ public class PrintPeers {
 
     private static void printDNS() throws PeerDiscoveryException {
         long start = System.currentTimeMillis();
-        DnsDiscovery dns = new DnsDiscovery(MainNetParams.get());
+        DnsDiscovery dns = new DnsDiscovery(TestNet3Params.get());
         dnsPeers = dns.getPeers(0, 10, TimeUnit.SECONDS);
         printPeers(dnsPeers);
         printElapsed(start);
@@ -74,7 +74,7 @@ public class PrintPeers {
         for (InetSocketAddress peer : dnsPeers) addrs.add(peer.getAddress());
         System.out.println("Scanning " + addrs.size() + " peers:");
 
-        final NetworkParameters params = MainNetParams.get();
+        final NetworkParameters params = TestNet3Params.get();
         final Object lock = new Object();
         final long[] bestHeight = new long[1];
 
