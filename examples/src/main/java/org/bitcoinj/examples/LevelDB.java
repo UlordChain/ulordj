@@ -19,7 +19,7 @@ package org.bitcoinj.examples;
 import java.net.InetAddress;
 import org.bitcoinj.core.FullPrunedBlockChain;
 import org.bitcoinj.core.PeerGroup;
-import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.store.FullPrunedBlockStore;
 import org.bitcoinj.store.LevelDBFullPrunedBlockStore;
 
@@ -30,14 +30,14 @@ public class LevelDB {
          * 390000 then exit.
          */
         FullPrunedBlockStore store = new LevelDBFullPrunedBlockStore(
-                MainNetParams.get(), args[0], 1000, 100 * 1024 * 1024l,
+                TestNet3Params.get(), args[0], 1000, 100 * 1024 * 1024l,
                 10 * 1024 * 1024, 100000, true, 390000);
 
         FullPrunedBlockChain vChain = new FullPrunedBlockChain(
-                MainNetParams.get(), store);
+                TestNet3Params.get(), store);
         vChain.setRunScripts(false);
 
-        PeerGroup vPeerGroup = new PeerGroup(MainNetParams.get(), vChain);
+        PeerGroup vPeerGroup = new PeerGroup(TestNet3Params.get(), vChain);
         vPeerGroup.setUseLocalhostPeerWhenPossible(true);
         vPeerGroup.addAddress(InetAddress.getLocalHost());
 

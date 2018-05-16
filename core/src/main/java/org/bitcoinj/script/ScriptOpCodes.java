@@ -157,9 +157,15 @@ public class ScriptOpCodes {
     public static final int OP_NOP3 = OP_CHECKSEQUENCEVERIFY;
     public static final int OP_NOP4 = 0xb3;
     public static final int OP_NOP5 = 0xb4;
+    @Deprecated
     public static final int OP_NOP6 = 0xb5;
+    public static final int OP_CLAIM_NAME = OP_NOP6;
+    @Deprecated
     public static final int OP_NOP7 = 0xb6;
+    public static final int OP_SUPPORT_CLAIM = OP_NOP7;
+    @Deprecated
     public static final int OP_NOP8 = 0xb7;
+    public static final int OP_UPDATE_CLAIM = OP_NOP8;
     public static final int OP_NOP9 = 0xb8;
     public static final int OP_NOP10 = 0xb9;
     public static final int OP_INVALIDOPCODE = 0xff;
@@ -271,9 +277,12 @@ public class ScriptOpCodes {
         .put(OP_CHECKSEQUENCEVERIFY, "CHECKSEQUENCEVERIFY")
         .put(OP_NOP4, "NOP4")
         .put(OP_NOP5, "NOP5")
-        .put(OP_NOP6, "NOP6")
-        .put(OP_NOP7, "NOP7")
-        .put(OP_NOP8, "NOP8")
+        //.put(OP_NOP6, "NOP6")
+        .put(OP_CLAIM_NAME, "CLAIM_NAME")
+        //.put(OP_NOP7, "NOP7")
+        .put(OP_SUPPORT_CLAIM, "SUPPORT_CLAIM")
+        //.put(OP_NOP8, "NOP8")
+        .put(OP_UPDATE_CLAIM, "UPDATE_CLAIM")
         .put(OP_NOP9, "NOP9")
         .put(OP_NOP10, "NOP10").build();
 
@@ -386,9 +395,12 @@ public class ScriptOpCodes {
         .put("NOP3", OP_NOP3)
         .put("NOP4", OP_NOP4)
         .put("NOP5", OP_NOP5)
-        .put("NOP6", OP_NOP6)
-        .put("NOP7", OP_NOP7)
-        .put("NOP8", OP_NOP8)
+        .put("CLAIM_NAME", OP_CLAIM_NAME)
+        //.put("NOP6", OP_NOP6)
+        .put("SUPPORT_CLAIM", OP_SUPPORT_CLAIM)
+        //.put("NOP7", OP_NOP7)
+        .put("UPDATE_CLAIM", OP_UPDATE_CLAIM)
+        //.put("NOP8", OP_NOP8)
         .put("NOP9", OP_NOP9)
         .put("NOP10", OP_NOP10).build();
 
