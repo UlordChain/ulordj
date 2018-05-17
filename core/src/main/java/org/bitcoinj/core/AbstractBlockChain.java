@@ -487,8 +487,8 @@ public abstract class AbstractBlockChain {
             } else {
                 //checkState(lock.isHeldByCurrentThread());
                 // It connects to somewhere on the chain. Not necessarily the top of the best known chain.
-                //params.checkDifficultyTransitions(storedPrev, block, blockStore);
-                checkDifficultyTransitions(storedPrev, block);
+                params.checkDifficultyTransitions(storedPrev, block, blockStore);
+                //checkDifficultyTransitions_Old(storedPrev, block);
                 connectBlock(block, storedPrev, shouldVerifyTransactions(), filteredTxHashList, filteredTxn);
             }
 
@@ -503,7 +503,7 @@ public abstract class AbstractBlockChain {
         /**
          * Throws an exception if the blocks difficulty is not correct.
          */
-    private void checkDifficultyTransitions(StoredBlock storedPrev, Block nextBlock) throws BlockStoreException, VerificationException {
+    private void checkDifficultyTransitions_Old(StoredBlock storedPrev, Block nextBlock) throws BlockStoreException, VerificationException {
         //checkState(lock.isHeldByCurrentThread());
 
         int DiffMode = 1;

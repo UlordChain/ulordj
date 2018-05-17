@@ -52,6 +52,9 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         majorityRejectBlockOutdated = MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED;
         majorityWindow = MAINNET_MAJORITY_WINDOW;
 
+        minActualTimespan = averagingWindowTimespan * (100 - nPowMaxAdjustUp)/100;
+        maxActualTimespan = averagingWindowTimespan * (100 + nPowMaxAdjustDown)/100;
+
         genesisBlock.setDifficultyTarget(503951731L);
         genesisBlock.setTime(1524045652L);
         genesisBlock.setNonce(new BigInteger("0000be7245a98c700f01293501a062837cb465afd70da22ee812b69a0c131f8c", 16));

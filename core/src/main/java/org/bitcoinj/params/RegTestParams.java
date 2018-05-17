@@ -62,6 +62,11 @@ public class RegTestParams extends AbstractBitcoinNetParams {
         port = 29888;
         //id = ID_REGTEST;
 
+        nPowMaxAdjustDown = 0;
+        nPowMaxAdjustUp = 0;
+        minActualTimespan = averagingWindowTimespan * (100 - nPowMaxAdjustUp)/100;
+        maxActualTimespan = averagingWindowTimespan * (100 + nPowMaxAdjustDown)/100;
+
         majorityEnforceBlockUpgrade = TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED;
         majorityWindow = TESTNET_MAJORITY_WINDOW;

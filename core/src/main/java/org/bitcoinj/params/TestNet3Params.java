@@ -60,9 +60,12 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         checkState(genesisHash.equals("000f378be841f44e75346eebd931b13041f0dee561af6a80cfea6669c1bfec03"));
         alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
 
+        minActualTimespan = averagingWindowTimespan * (100 - nPowMaxAdjustUp)/100;
+        maxActualTimespan = averagingWindowTimespan * (100 + nPowMaxAdjustDown)/100;
+
         dnsSeeds = new String[] {
-                //"node.ulord.one",
-                //"10.221.153.180",
+                "node.ulord.one",
+                "10.221.153.180",
                 "119.27.188.44"
         };
         addrSeeds = null;
@@ -95,33 +98,25 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
         final BlockStore blockStore) throws VerificationException, BlockStoreException {
 
-        //        if (!isDifficultyTransitionPoint(storedPrev) && nextBlock.getTime().after(testnetDiffDate)) {
-//            UldBlock prev = storedPrev.getHeader();
-//
-//            // After 15th February 2012 the rules on the testnet change to avoid people running up the difficulty
-//            // and then leaving, making it too hard to mine a block. On non-difficulty transition points, easy
-//            // blocks are allowed if there has been a span of 20 minutes without one.
-//            final long timeDelta = nextBlock.getTimeSeconds() - prev.getTimeSeconds();
-//            // There is an integer underflow bug in bitcoin-qt that means mindiff blocks are accepted when time
-//            // goes backwards.
-//            if (timeDelta >= 0 && timeDelta <= NetworkParameters.TARGET_SPACING * 2) {
-//          // Walk backwards until we find a block that doesn't have the easiest proof of work, then check
-//          // that difficulty is equal to that one.
-//          StoredBlock cursor = storedPrev;
-//          while (!cursor.getHeader().equals(getGenesisBlock()) &&
-//                       cursor.getHeight() % getInterval() != 0 &&
-//                       cursor.getHeader().getDifficultyTargetAsInteger().equals(getMaxTarget()))
-//                    cursor = cursor.getPrev(blockStore);
-//          BigInteger cursorTarget = cursor.getHeader().getDifficultyTargetAsInteger();
-//          BigInteger newTarget = nextBlock.getDifficultyTargetAsInteger();
-//          if (!cursorTarget.equals(newTarget))
-//                    throw new VerificationException("Testnet block transition that is not allowed: " +
-//                  Long.toHexString(cursor.getHeader().getDifficultyTarget()) + " vs " +
-//                  Long.toHexString(nextBlock.getDifficultyTarget()));
+        Block prev = storedPrev.getHeader();
+
+        if(nextBlock.getTime().after(prev.getTime())) {
+//            if(storedPrev.getHeight() < 19) {
+//                // Check if for first 19 block if the difficulty didn't change
+//                if(nextBlock.getDifficultyTarget() !=  prev.getDifficultyTarget())
+//                    throw new VerificationException("Unexpected change in difficulty at height " + storedPrev.getHeight() +
+//                            ": " + Long.toHexString(nextBlock.getDifficultyTarget()) + " vs " +
+//                            Long.toHexString(prev.getDifficultyTarget()));
 //            }
-//        } else {
-//            super.checkDifficultyTransitions(storedPrev, nextBlock, blockStore);
-//        }
+//            else {
+//                super.checkDifficultyTransitions(storedPrev, nextBlock, blockStore);
+//            }
+            super.checkDifficultyTransitions(storedPrev, nextBlock, blockStore);
+        }
+        else {
+            throw new VerificationException("Next block time cannot be before previous block time. " +
+                    nextBlock.getTimeSeconds() + " vs " + prev.getTimeSeconds());
+        }
 
     }
 }
