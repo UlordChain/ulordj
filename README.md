@@ -1,5 +1,3 @@
-[![Build Status]()]()   [![Coverage Status]()]() 
-
 ### Welcome to ulordj
 
 The ulordj library is a Java implementation of the Ulord protocol, which allows it to maintain a wallet and send/receive transactions without needing a local copy of Ulord Core. It comes with full documentation and some example apps showing how to use it.
