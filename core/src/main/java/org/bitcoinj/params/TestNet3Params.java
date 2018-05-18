@@ -60,8 +60,8 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         checkState(genesisHash.equals("000f378be841f44e75346eebd931b13041f0dee561af6a80cfea6669c1bfec03"));
         alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
 
-        minActualTimespan = averagingWindowTimespan * (100 - nPowMaxAdjustUp)/100;
-        maxActualTimespan = averagingWindowTimespan * (100 + nPowMaxAdjustDown)/100;
+        minActualTimespan = (averagingWindowTimespan * (100 - nPowMaxAdjustUp)) / 100;
+        maxActualTimespan = (averagingWindowTimespan * (100 + nPowMaxAdjustDown)) / 100;
 
         dnsSeeds = new String[] {
                 "node.ulord.one",

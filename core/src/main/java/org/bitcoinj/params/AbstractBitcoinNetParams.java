@@ -20,25 +20,17 @@ package org.bitcoinj.params;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.StoredBlock;
-import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.Utils;
+import org.bitcoinj.core.*;
 import org.bitcoinj.utils.MonetaryFormat;
-import org.bitcoinj.core.VerificationException;
 import org.bitcoinj.store.BlockStore;
 import org.bitcoinj.store.BlockStoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Stopwatch;
-
-import org.bitcoinj.core.BitcoinSerializer;
 
 /**
  * Parameters for Bitcoin-like networks.
@@ -79,23 +71,14 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
     	final BlockStore blockStore) throws VerificationException, BlockStoreException {
 
-
-//        // Return if the previous block is genesis
-//        if(nextBlock.getHash().compareTo(this.genesisBlock.getHash()) == 0) {
-//            return;
-//        }
-
         Block prev = storedPrev.getHeader();
-
         // Find the first block in the averaging interval
-        StoredBlock cursor = blockStore.get(prev.getHash());
+        StoredBlock cursor = blockStore.get(nextBlock.getPrevBlockHash());
         BigInteger nBitsTotal = BigInteger.ZERO;
         for(int i = 0; !cursor.getHeader().getHash().equals(this.genesisBlock.getHash())  && i < this.N_POW_AVERAGING_WINDOW; ++i) {
-            //System.out.println("Diff " + cursor.getHeight() + " " + cursor.getHeader().getDifficultyTargetAsInteger().toString(16));
-            Block currentBlock = cursor.getHeader();
-            BigInteger nBitsTemp = currentBlock.getDifficultyTargetAsInteger();
+            BigInteger nBitsTemp = cursor.getHeader().getDifficultyTargetAsInteger();
             nBitsTotal = nBitsTotal.add(nBitsTemp);
-            cursor = blockStore.get(currentBlock.getPrevBlockHash());
+            cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
         }
 
         if(cursor.getHeader().getHash() == genesisBlock.getHash())
@@ -108,12 +91,11 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
 
         // Find the average
         BigInteger nBitsAvg = nBitsTotal.divide(BigInteger.valueOf(this.N_POW_AVERAGING_WINDOW));
-        System.out.println("Average: " + nBitsAvg.toString(16));
-        //Block blockBeforePrevBlock = cursor.getHeader();
 
-        //StoredBlock prevBlockOfPrevBlock = blockStore.get(prev.getPrevBlockHash());
-        int timespan = (int) (prev.getTimeSeconds() - cursor.getHeader().getTimeSeconds());
-        timespan = this.averagingWindowTimespan + (timespan - this.averagingWindowTimespan)/4;
+        long prevBlockTimeSpan = getMedianTimestampOfRecentBlocks(storedPrev, blockStore);
+        long firstBlockTimeSpan = getMedianTimestampOfRecentBlocks(cursor, blockStore);
+        long timespan = (prevBlockTimeSpan - firstBlockTimeSpan);//cursor.getHeader().getTimeSeconds());
+        timespan = this.averagingWindowTimespan + (timespan - this.averagingWindowTimespan) / 4;
 
         if(timespan < this.minActualTimespan)
             timespan = minActualTimespan;
@@ -121,7 +103,6 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
             timespan = maxActualTimespan;
 
 
-        // create target with all the previous blocks / 17
         BigInteger expectedTarget = nBitsAvg;
         expectedTarget = expectedTarget.divide(BigInteger.valueOf(averagingWindowTimespan));
         expectedTarget = expectedTarget.multiply(BigInteger.valueOf(timespan));
@@ -141,6 +122,21 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
             throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
                     Long.toHexString(expectedTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
         }
+    }
+
+    /**
+     * Gets the median timestamp of the last 11 blocks
+     */
+    private long getMedianTimestampOfRecentBlocks(StoredBlock storedBlock,
+                                                         BlockStore store) throws BlockStoreException {
+        long[] timestamps = new long[11];
+        int unused = 9;
+        timestamps[10] = storedBlock.getHeader().getTimeSeconds();
+        while (unused >= 0 && (storedBlock = storedBlock.getPrev(store)).getHeader().getHash() != this.genesisBlock.getHash())
+            timestamps[unused--] = storedBlock.getHeader().getTimeSeconds();
+
+        Arrays.sort(timestamps, unused+1, 11);
+        return timestamps[unused + (11-unused)/2];
     }
 
     @Override
