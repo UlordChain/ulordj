@@ -79,43 +79,68 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
     	final BlockStore blockStore) throws VerificationException, BlockStoreException {
 
-            Block prev = storedPrev.getHeader();
 
-            // Return if the previous block of prev is genesis
-            if(prev.getPrevBlockHash().compareTo(this.genesisBlock.getHash()) == 0)
-                return;
+//        // Return if the previous block is genesis
+//        if(nextBlock.getHash().compareTo(this.genesisBlock.getHash()) == 0) {
+//            return;
+//        }
 
-            // We need one block before the prev block
-            StoredBlock cursor = blockStore.get(prev.getPrevBlockHash());
+        Block prev = storedPrev.getHeader();
 
-            Block blockBeforePrevBlock = cursor.getHeader();
-            int timespan = (int) (prev.getTimeSeconds() - blockBeforePrevBlock.getTimeSeconds());
-            timespan = this.averagingWindowTimespan + (timespan - this.averagingWindowTimespan)/4;
+        // Find the first block in the averaging interval
+        StoredBlock cursor = blockStore.get(prev.getHash());
+        BigInteger nBitsTotal = BigInteger.ZERO;
+        for(int i = 0; !cursor.getHeader().getHash().equals(this.genesisBlock.getHash())  && i < this.N_POW_AVERAGING_WINDOW; ++i) {
+            //System.out.println("Diff " + cursor.getHeight() + " " + cursor.getHeader().getDifficultyTargetAsInteger().toString(16));
+            Block currentBlock = cursor.getHeader();
+            BigInteger nBitsTemp = currentBlock.getDifficultyTargetAsInteger();
+            nBitsTotal = nBitsTotal.add(nBitsTemp);
+            cursor = blockStore.get(currentBlock.getPrevBlockHash());
+        }
 
-            if(timespan < this.minActualTimespan)
-                timespan = minActualTimespan;
-            if(timespan > this.maxActualTimespan)
-                timespan = maxActualTimespan;
+        if(cursor.getHeader().getHash() == genesisBlock.getHash())
+        {
+            // Check if the difficulty didn't change
+            if(nextBlock.getDifficultyTarget() != prev.getDifficultyTarget())
+                throw new VerificationException("Difficulty did not match");
+            return;
+        }
 
-            BigInteger newTarget = Utils.decodeCompactBits(nextBlock.getDifficultyTarget());
-            newTarget = newTarget.divide(BigInteger.valueOf(averagingWindowTimespan));
-            newTarget = newTarget.multiply(BigInteger.valueOf(timespan));
+        // Find the average
+        BigInteger nBitsAvg = nBitsTotal.divide(BigInteger.valueOf(this.N_POW_AVERAGING_WINDOW));
+        System.out.println("Average: " + nBitsAvg.toString(16));
+        //Block blockBeforePrevBlock = cursor.getHeader();
 
-            if(newTarget.compareTo(this.getMaxTarget()) > 0) {
-                newTarget = this.getMaxTarget();
-                log.info("Difficulty hit proof of work limit: {}", newTarget.toString(16));
-            }
+        //StoredBlock prevBlockOfPrevBlock = blockStore.get(prev.getPrevBlockHash());
+        int timespan = (int) (prev.getTimeSeconds() - cursor.getHeader().getTimeSeconds());
+        timespan = this.averagingWindowTimespan + (timespan - this.averagingWindowTimespan)/4;
 
-            int accuracyByts = (int) (nextBlock.getDifficultyTarget() >>> 24) - 3;
-            long receivedTargetCompact = nextBlock.getDifficultyTarget();
+        if(timespan < this.minActualTimespan)
+            timespan = minActualTimespan;
+        if(timespan > this.maxActualTimespan)
+            timespan = maxActualTimespan;
 
-            BigInteger mask = BigInteger.valueOf(0xFFFFFFL).shiftLeft(accuracyByts * 8);
-            newTarget = newTarget.and(mask);
-            long newTargetCompact = Utils.encodeCompactBits(newTarget);
 
-            if(newTargetCompact != receivedTargetCompact)
-                throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
-                        Long.toHexString(newTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
+        // create target with all the previous blocks / 17
+        BigInteger expectedTarget = nBitsAvg;
+        expectedTarget = expectedTarget.divide(BigInteger.valueOf(averagingWindowTimespan));
+        expectedTarget = expectedTarget.multiply(BigInteger.valueOf(timespan));
+
+        if(expectedTarget.compareTo(this.getMaxTarget()) > 0) {
+            expectedTarget = this.getMaxTarget();
+            log.info("Difficulty hit proof of work limit: {}", expectedTarget.toString(16));
+        }
+
+        long receivedTargetCompact = nextBlock.getDifficultyTarget();
+        long expectedTargetCompact = Utils.encodeCompactBits(expectedTarget);
+
+        if(expectedTargetCompact != receivedTargetCompact)
+        {
+            System.out.println("Network provided difficulty bits do not match what was calculated: " +
+                    Long.toHexString(expectedTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
+            throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
+                    Long.toHexString(expectedTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
+        }
     }
 
     @Override

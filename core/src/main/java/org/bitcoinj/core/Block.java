@@ -535,8 +535,10 @@ public class Block extends Message {
      */
     public BigInteger getDifficultyTargetAsInteger() throws VerificationException {
         BigInteger target = Utils.decodeCompactBits(difficultyTarget);
-        if (target.signum() <= 0 || target.compareTo(params.maxTarget) > 0)
+        if (target.signum() <= 0 || target.compareTo(params.maxTarget) > 0) {
+            System.out.println("Difficulty target is bad: " + target.toString());
             throw new VerificationException("Difficulty target is bad: " + target.toString());
+        }
         return target;
     }
 

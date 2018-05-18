@@ -94,29 +94,34 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
     // February 16th 2012
     private static final Date testnetDiffDate = new Date(1329264000000L);
 
-    @Override
-    public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
-        final BlockStore blockStore) throws VerificationException, BlockStoreException {
-
-        Block prev = storedPrev.getHeader();
-
-        if(nextBlock.getTime().after(prev.getTime())) {
-//            if(storedPrev.getHeight() < 19) {
+//    @Override
+//    public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
+//        final BlockStore blockStore) throws VerificationException, BlockStoreException {
+//
+//        Block prev = storedPrev.getHeader();
+//
+//        if(nextBlock.getTime().after(prev.getTime())) {
+//            if(storedPrev.getHeight() < 18) {
 //                // Check if for first 19 block if the difficulty didn't change
-//                if(nextBlock.getDifficultyTarget() !=  prev.getDifficultyTarget())
+//                if(nextBlock.getDifficultyTarget() !=  prev.getDifficultyTarget()) {
+//                    System.out.println("Unexpected change in difficulty at height " + storedPrev.getHeight() +
+//                            ": " + Long.toHexString(nextBlock.getDifficultyTarget()) + " vs " +
+//                            Long.toHexString(prev.getDifficultyTarget()));
 //                    throw new VerificationException("Unexpected change in difficulty at height " + storedPrev.getHeight() +
 //                            ": " + Long.toHexString(nextBlock.getDifficultyTarget()) + " vs " +
 //                            Long.toHexString(prev.getDifficultyTarget()));
+//                }
 //            }
 //            else {
 //                super.checkDifficultyTransitions(storedPrev, nextBlock, blockStore);
 //            }
-            super.checkDifficultyTransitions(storedPrev, nextBlock, blockStore);
-        }
-        else {
-            throw new VerificationException("Next block time cannot be before previous block time. " +
-                    nextBlock.getTimeSeconds() + " vs " + prev.getTimeSeconds());
-        }
-
-    }
+//        }
+//        else {
+//            System.out.println("Next block time cannot be before previous block time. " +
+//                    nextBlock.getTimeSeconds() + " vs " + prev.getTimeSeconds());
+//            throw new VerificationException("Next block time cannot be before previous block time. " +
+//                    nextBlock.getTimeSeconds() + " vs " + prev.getTimeSeconds());
+//        }
+//
+//    }
 }
