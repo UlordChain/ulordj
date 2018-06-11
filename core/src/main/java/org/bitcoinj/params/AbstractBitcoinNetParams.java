@@ -132,8 +132,9 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
         long[] timestamps = new long[11];
         int unused = 9;
         timestamps[10] = storedBlock.getHeader().getTimeSeconds();
-        while (unused >= 0 && (storedBlock = storedBlock.getPrev(store)).getHeader().getHash() != this.genesisBlock.getHash())
-            timestamps[unused--] = storedBlock.getHeader().getTimeSeconds();
+        if(storedBlock.getPrev(store) != null)
+            while (unused >= 0 && !((storedBlock = storedBlock.getPrev(store)).getHeader().getHash()).equals(this.genesisBlock.getHash()) )
+                timestamps[unused--] = storedBlock.getHeader().getTimeSeconds();
 
         Arrays.sort(timestamps, unused+1, 11);
         return timestamps[unused + (11-unused)/2];
