@@ -26,7 +26,7 @@ syntax = "proto2";
 
 package paymentchannels;
 
-option java_package = "org.bitcoinj.protocols.channels";
+option java_package = "org.ulordj.protocols.channels";
 option java_outer_classname = "ClientState";
 
 // A set of StoredPaymentChannel's

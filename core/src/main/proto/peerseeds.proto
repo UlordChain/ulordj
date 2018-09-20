@@ -4,9 +4,9 @@
 
 syntax = "proto2";
 
-package org.bitcoin.crawler;
+package org.ulord.crawler;
 
-option java_package = "org.bitcoin.crawler";
+option java_package = "org.ulord.crawler";
 option java_outer_classname = "PeerSeedProtos";
 
 message PeerSeedData {

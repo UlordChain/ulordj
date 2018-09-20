@@ -16,9 +16,9 @@
 
 package wallettemplate;
 
-import org.bitcoinj.core.listeners.DownloadProgressTracker;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.utils.MonetaryFormat;
+import org.ulordj.core.listeners.DownloadProgressTracker;
+import org.ulordj.core.Coin;
+import org.ulordj.utils.MonetaryFormat;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -28,13 +28,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import org.fxmisc.easybind.EasyBind;
-import wallettemplate.controls.ClickableBitcoinAddress;
+import wallettemplate.controls.ClickableUlordAddress;
 import wallettemplate.controls.NotificationBarPane;
-import wallettemplate.utils.BitcoinUIModel;
+import wallettemplate.utils.UlordUIModel;
 import wallettemplate.utils.easing.EasingMode;
 import wallettemplate.utils.easing.ElasticInterpolator;
 
-import static wallettemplate.Main.bitcoin;
+import static wallettemplate.Main.ulord;
 
 /**
  * Gets created auto-magically by FXMLLoader via reflection. The widget fields are set to the GUI controls they're named
@@ -44,9 +44,9 @@ public class MainController {
     public HBox controlsBox;
     public Label balance;
     public Button sendMoneyOutBtn;
-    public ClickableBitcoinAddress addressControl;
+    public ClickableUlordAddress addressControl;
 
-    private BitcoinUIModel model = new BitcoinUIModel();
+    private UlordUIModel model = new UlordUIModel();
     private NotificationBarPane.Item syncItem;
 
     // Called by FXMLLoader.
@@ -55,7 +55,7 @@ public class MainController {
     }
 
     public void onBitcoinSetup() {
-        model.setWallet(bitcoin.wallet());
+        model.setWallet(ulord.wallet());
         addressControl.addressProperty().bind(model.addressProperty());
         balance.textProperty().bind(EasyBind.map(model.balanceProperty(), coin -> MonetaryFormat.BTC.noCode().format(coin).toString()));
         // Don't let the user click send money when the wallet is empty.
