@@ -43,10 +43,10 @@ Usage: wallet-tool --flags action-name
                        treated as a public key instead of an address and the send will use
                        <key> CHECKSIG as the script.
                        If --payment-request is specified, a transaction will be created using the provided
-                       payment request. A payment request can be a local file, a bitcoin uri, or url to
+                       payment request. A payment request can be a local file, a ulord uri, or url to
                        download the payment request, e.g.:
-                         --payment-request=/path/to/my.bitcoinpaymentrequest
-                         --payment-request=bitcoin:?r=http://merchant.com/pay.php?123
+                         --payment-request=/path/to/my.ulordpaymentrequest
+                         --payment-request=ulord:?r=http://merchant.com/pay.php?123
                          --payment-request=http://merchant.com/pay.php?123
 
                        Other options include:
