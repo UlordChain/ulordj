@@ -38,14 +38,14 @@
   </parent>
 
   <scm>
-    <connection>scm:git:https://github.com/ulordj/ulordj</connection>
-    <developerConnection>scm:git:https://github.com/ulordj/ulordj</developerConnection>
-    <url>scm:git:https://github.com/ulordj/ulordj</url>
+    <connection>scm:git:https://github.com/UlordChain/ulordj</connection>
+    <developerConnection>scm:git:https://github.com/UlordChain/ulordj</developerConnection>
+    <url>scm:git:https://github.com/UlordChain/ulordj</url>
   </scm>
 
   <name>ulordj Parent</name>
-  <description>Provides the common configuration for the BitCoinJ modules</description>
-  <url>http://www.ulordj.org/</url>
+  <description>Provides the common configuration for the UlordJ modules</description>
+  <url>http://www.ulord.one/</url>
 
   <licenses>
     <license>
@@ -58,15 +58,8 @@
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/ulordj/ulordj/issues</url>
+    <url>https://github.com/UlordChain/ulordj/issues</url>
   </issueManagement>
-
-  <mailingLists>
-    <mailingList>
-      <name>ulordj Google Group</name>
-      <post>https://groups.google.com/forum/#!forum/ulordj</post>
-    </mailingList>
-  </mailingLists>
 
   <distributionManagement>
     <snapshotRepository>

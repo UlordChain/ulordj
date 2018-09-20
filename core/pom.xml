@@ -286,7 +286,7 @@
                     <excludes>
                         <exclude>**/Protos*.class</exclude> <!-- Exclude generated protobuf classes -->
                         <exclude>org/ulordj/jni/*</exclude> <!-- Exclude JNI classes -->
-                        <exclude>org/bitcoin/*</exclude> <!-- Exclude native classes -->
+                        <exclude>org/ulord/*</exclude> <!-- Exclude native classes -->
                     </excludes>
                 </configuration>
                 <executions>
