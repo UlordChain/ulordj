@@ -16,9 +16,9 @@
 
 package wallettemplate.controls;
 
-import org.bitcoinj.core.LegacyAddress;
-import org.bitcoinj.core.AddressFormatException;
-import org.bitcoinj.core.NetworkParameters;
+import org.ulordj.core.LegacyAddress;
+import org.ulordj.core.AddressFormatException;
+import org.ulordj.core.NetworkParameters;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import wallettemplate.utils.TextFieldValidator;

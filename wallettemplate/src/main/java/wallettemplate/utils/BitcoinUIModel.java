@@ -16,11 +16,11 @@
 
 package wallettemplate.utils;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.listeners.DownloadProgressTracker;
-import org.bitcoinj.wallet.Wallet;
-import org.bitcoinj.wallet.listeners.WalletChangeEventListener;
+import org.ulordj.core.Address;
+import org.ulordj.core.Coin;
+import org.ulordj.core.listeners.DownloadProgressTracker;
+import org.ulordj.wallet.Wallet;
+import org.ulordj.wallet.listeners.WalletChangeEventListener;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -30,7 +30,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.util.Date;
 
 /**
- * A class that exposes relevant bitcoin stuff as JavaFX bindable properties.
+ * A class that exposes relevant ulord stuff as JavaFX bindable properties.
  */
 public class BitcoinUIModel {
     private SimpleObjectProperty<Address> address = new SimpleObjectProperty<>();
