@@ -29,7 +29,7 @@ import java.util.Arrays;
 import static org.ulordj.core.Utils.HEX;
 import static org.junit.Assert.*;
 
-public class BitcoinSerializerTest {
+public class UlordSerializerTest {
     private static final NetworkParameters MAINNET = MainNetParams.get();
     private static final byte[] ADDRESS_MESSAGE_BYTES = HEX.decode("f9beb4d96164647200000000000000001f000000" +
             "ed52399b01e215104d010000000000000000000000000000000000ffff0a000001208d");
@@ -203,14 +203,14 @@ public class BitcoinSerializerTest {
 
     @Test(expected = BufferUnderflowException.class)
     public void testBitcoinPacketHeaderTooShort() {
-        new BitcoinSerializer.BitcoinPacketHeader(ByteBuffer.wrap(new byte[] { 0 }));
+        new UlordSerializer.BitcoinPacketHeader(ByteBuffer.wrap(new byte[] { 0 }));
     }
 
     @Test(expected = ProtocolException.class)
     public void testBitcoinPacketHeaderTooLong() {
         // Message with a Message size which is 1 too big, in little endian format.
         byte[] wrongMessageLength = HEX.decode("000000000000000000000000010000020000000000");
-        new BitcoinSerializer.BitcoinPacketHeader(ByteBuffer.wrap(wrongMessageLength));
+        new UlordSerializer.BitcoinPacketHeader(ByteBuffer.wrap(wrongMessageLength));
     }
 
     @Test(expected = BufferUnderflowException.class)

@@ -165,13 +165,13 @@ public class ParseByteCacheTest {
         MessageSerializer bsRef = UNITTEST.getSerializer(false);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         
-        BitcoinSerializer bs = UNITTEST.getSerializer(retain);
+        UlordSerializer bs = UNITTEST.getSerializer(retain);
         Block b1;
         Block bRef;
         b1 = (Block) bs.deserialize(ByteBuffer.wrap(blockBytes));
         bRef = (Block) bsRef.deserialize(ByteBuffer.wrap(blockBytes));
         
-        // verify our reference BitcoinSerializer produces matching byte array.
+        // verify our reference UlordSerializer produces matching byte array.
         bos.reset();
         bsRef.serialize(bRef, bos);
         assertTrue(Arrays.equals(bos.toByteArray(), blockBytes));
@@ -358,13 +358,13 @@ public class ParseByteCacheTest {
         MessageSerializer bsRef = params.getSerializer(false);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-        BitcoinSerializer bs = params.getSerializer(retain);
+        UlordSerializer bs = params.getSerializer(retain);
         Transaction t1;
         Transaction tRef;
         t1 = (Transaction) bs.deserialize(ByteBuffer.wrap(txBytes));
         tRef = (Transaction) bsRef.deserialize(ByteBuffer.wrap(txBytes));
 
-        // verify our reference BitcoinSerializer produces matching byte array.
+        // verify our reference UlordSerializer produces matching byte array.
         bos.reset();
         bsRef.serialize(tRef, bos);
         assertTrue(Arrays.equals(bos.toByteArray(), txBytes));

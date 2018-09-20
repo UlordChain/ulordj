@@ -274,7 +274,7 @@ public abstract class Message {
 
     /**
      * This method is a NOP for all classes except Block and Transaction.  It is only declared in Message
-     * so BitcoinSerializer can avoid 2 instanceof checks + a casting.
+     * so UlordSerializer can avoid 2 instanceof checks + a casting.
      */
     public Sha256Hash getHash() {
         throw new UnsupportedOperationException();

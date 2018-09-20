@@ -17,7 +17,7 @@
 package wallettemplate.controls;
 
 import org.ulordj.core.Address;
-import org.ulordj.uri.BitcoinURI;
+import org.ulordj.uri.UlordURI;
 import de.jensd.fx.fontawesome.AwesomeDude;
 import de.jensd.fx.fontawesome.AwesomeIcon;
 import javafx.beans.binding.StringExpression;
@@ -55,7 +55,7 @@ import static javafx.beans.binding.Bindings.convert;
  * address looks like a blue hyperlink. Next to it there are two icons, one that copies to the clipboard and another
  * that shows a QRcode.
  */
-public class ClickableBitcoinAddress extends AnchorPane {
+public class ClickableUlordAddress extends AnchorPane {
     @FXML protected Label addressLabel;
     @FXML protected ContextMenu addressMenu;
     @FXML protected Label copyWidget;
@@ -64,7 +64,7 @@ public class ClickableBitcoinAddress extends AnchorPane {
     protected SimpleObjectProperty<Address> address = new SimpleObjectProperty<>();
     private final StringExpression addressStr;
 
-    public ClickableBitcoinAddress() {
+    public ClickableUlordAddress() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("bitcoin_address.fxml"));
             loader.setRoot(this);
@@ -87,7 +87,7 @@ public class ClickableBitcoinAddress extends AnchorPane {
     }
 
     public String uri() {
-        return BitcoinURI.convertToBitcoinURI(address.get(), null, Main.APP_NAME, null);
+        return UlordURI.convertToBitcoinURI(address.get(), null, Main.APP_NAME, null);
     }
 
     public Address getAddress() {
@@ -150,7 +150,7 @@ public class ClickableBitcoinAddress extends AnchorPane {
         // non-centered on the screen. Finally fade/blur it in.
         Pane pane = new Pane(view);
         pane.setMaxSize(qrImage.getWidth(), qrImage.getHeight());
-        final Main.OverlayUI<ClickableBitcoinAddress> overlay = Main.instance.overlayUI(pane, this);
+        final Main.OverlayUI<ClickableUlordAddress> overlay = Main.instance.overlayUI(pane, this);
         view.setOnMouseClicked(event1 -> overlay.done());
     }
 }

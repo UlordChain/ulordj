@@ -61,7 +61,7 @@ public class WalletSettingsController {
 
     // Note: NOT called by FXMLLoader!
     public void initialize(@Nullable KeyParameter aesKey) {
-        DeterministicSeed seed = Main.bitcoin.wallet().getKeyChainSeed();
+        DeterministicSeed seed = Main.ulord.wallet().getKeyChainSeed();
         if (aesKey == null) {
             if (seed.isEncrypted()) {
                 log.info("Wallet is encrypted, requesting password first.");
@@ -71,7 +71,7 @@ public class WalletSettingsController {
             }
         } else {
             this.aesKey = aesKey;
-            seed = seed.decrypt(checkNotNull(Main.bitcoin.wallet().getKeyCrypter()), "", aesKey);
+            seed = seed.decrypt(checkNotNull(Main.ulord.wallet().getKeyCrypter()), "", aesKey);
             // Now we can display the wallet seed as appropriate.
             passwordButton.setText("Remove password");
         }
@@ -149,7 +149,7 @@ public class WalletSettingsController {
     public void restoreClicked(ActionEvent event) {
         // Don't allow a restore unless this wallet is presently empty. We don't want to end up with two wallets, too
         // much complexity, even though WalletAppKit will keep the current one as a backup file in case of disaster.
-        if (Main.bitcoin.wallet().getBalance().value > 0) {
+        if (Main.ulord.wallet().getBalance().value > 0) {
             informationalAlert("Wallet is not empty",
                     "You must empty this wallet out before attempting to restore an older one, as mixing wallets " +
                             "together can lead to invalidated backups.");
@@ -171,14 +171,14 @@ public class WalletSettingsController {
         long birthday = datePicker.getValue().atStartOfDay().toEpochSecond(ZoneOffset.UTC);
         DeterministicSeed seed = new DeterministicSeed(Splitter.on(' ').splitToList(wordsArea.getText()), null, "", birthday);
         // Shut down ulordj and restart it with the new seed.
-        Main.bitcoin.addListener(new Service.Listener() {
+        Main.ulord.addListener(new Service.Listener() {
             @Override
             public void terminated(Service.State from) {
                 Main.instance.setupWalletKit(seed);
-                Main.bitcoin.startAsync();
+                Main.ulord.startAsync();
             }
         }, Platform::runLater);
-        Main.bitcoin.stopAsync();
+        Main.ulord.stopAsync();
     }
 
 
@@ -186,7 +186,7 @@ public class WalletSettingsController {
         if (aesKey == null) {
             Main.instance.overlayUI("wallet_set_password.fxml");
         } else {
-            Main.bitcoin.wallet().decrypt(aesKey);
+            Main.ulord.wallet().decrypt(aesKey);
             informationalAlert("Wallet decrypted", "A password will no longer be required to send money or edit settings.");
             passwordButton.setText("Set password");
             aesKey = null;

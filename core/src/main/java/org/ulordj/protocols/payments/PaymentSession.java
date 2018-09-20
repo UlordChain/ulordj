@@ -20,7 +20,7 @@ import org.ulordj.core.*;
 import org.ulordj.crypto.TrustStoreLoader;
 import org.ulordj.params.MainNetParams;
 import org.ulordj.protocols.payments.PaymentProtocol.PkiVerificationData;
-import org.ulordj.uri.BitcoinURI;
+import org.ulordj.uri.UlordURI;
 import org.ulordj.utils.Threading;
 import org.ulordj.wallet.SendRequest;
 
@@ -47,12 +47,12 @@ import java.util.concurrent.Callable;
  * <p>A PaymentSession can be initialized from one of the following:</p>
  *
  * <ul>
- * <li>A {@link BitcoinURI} object that conforms to BIP 0072</li>
+ * <li>A {@link UlordURI} object that conforms to BIP 0072</li>
  * <li>A url where the {@link Protos.PaymentRequest} can be fetched</li>
  * <li>Directly with a {@link Protos.PaymentRequest} object</li>
  * </ul>
  *
- * <p>If initialized with a BitcoinURI or a url, a network request is made for the payment request object and a
+ * <p>If initialized with a UlordURI or a url, a network request is made for the payment request object and a
  * ListenableFuture is returned that will be notified with the PaymentSession object after it is downloaded.</p>
  *
  * <p>Once the PaymentSession is initialized, typically a wallet application will prompt the user to confirm that the
@@ -83,44 +83,44 @@ public class PaymentSession {
 
     /**
      * <p>Returns a future that will be notified with a PaymentSession object after it is fetched using the provided uri.
-     * uri is a BIP-72-style BitcoinURI object that specifies where the {@link Protos.PaymentRequest} object may
+     * uri is a BIP-72-style UlordURI object that specifies where the {@link Protos.PaymentRequest} object may
      * be fetched in the r= parameter.</p>
      *
      * <p>If the payment request object specifies a PKI method, then the system trust store will be used to verify
      * the signature provided by the payment request. An exception is thrown by the future if the signature cannot
      * be verified.</p>
      */
-    public static ListenableFuture<PaymentSession> createFromBitcoinUri(final BitcoinURI uri) throws PaymentProtocolException {
+    public static ListenableFuture<PaymentSession> createFromBitcoinUri(final UlordURI uri) throws PaymentProtocolException {
         return createFromBitcoinUri(uri, true, null);
     }
 
     /**
      * Returns a future that will be notified with a PaymentSession object after it is fetched using the provided uri.
-     * uri is a BIP-72-style BitcoinURI object that specifies where the {@link Protos.PaymentRequest} object may
+     * uri is a BIP-72-style UlordURI object that specifies where the {@link Protos.PaymentRequest} object may
      * be fetched in the r= parameter.
      * If verifyPki is specified and the payment request object specifies a PKI method, then the system trust store will
      * be used to verify the signature provided by the payment request. An exception is thrown by the future if the
      * signature cannot be verified.
      */
-    public static ListenableFuture<PaymentSession> createFromBitcoinUri(final BitcoinURI uri, final boolean verifyPki)
+    public static ListenableFuture<PaymentSession> createFromBitcoinUri(final UlordURI uri, final boolean verifyPki)
             throws PaymentProtocolException {
         return createFromBitcoinUri(uri, verifyPki, null);
     }
 
     /**
      * Returns a future that will be notified with a PaymentSession object after it is fetched using the provided uri.
-     * uri is a BIP-72-style BitcoinURI object that specifies where the {@link Protos.PaymentRequest} object may
+     * uri is a BIP-72-style UlordURI object that specifies where the {@link Protos.PaymentRequest} object may
      * be fetched in the r= parameter.
      * If verifyPki is specified and the payment request object specifies a PKI method, then the system trust store will
      * be used to verify the signature provided by the payment request. An exception is thrown by the future if the
      * signature cannot be verified.
      * If trustStoreLoader is null, the system default trust store is used.
      */
-    public static ListenableFuture<PaymentSession> createFromBitcoinUri(final BitcoinURI uri, final boolean verifyPki, @Nullable final TrustStoreLoader trustStoreLoader)
+    public static ListenableFuture<PaymentSession> createFromBitcoinUri(final UlordURI uri, final boolean verifyPki, @Nullable final TrustStoreLoader trustStoreLoader)
             throws PaymentProtocolException {
         String url = uri.getPaymentRequestUrl();
         if (url == null)
-            throw new PaymentProtocolException.InvalidPaymentRequestURL("No payment request URL (r= parameter) in BitcoinURI " + uri);
+            throw new PaymentProtocolException.InvalidPaymentRequestURL("No payment request URL (r= parameter) in UlordURI " + uri);
         try {
             return fetchPaymentRequest(new URI(url), verifyPki, trustStoreLoader);
         } catch (URISyntaxException e) {

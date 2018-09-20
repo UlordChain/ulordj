@@ -56,7 +56,7 @@ public abstract class PeerSocketHandler extends AbstractTimeoutHandler implement
     // messages which are larger than the read buffer, we have to keep a temporary buffer with its bytes.
     private byte[] largeReadBuffer;
     private int largeReadBufferPos;
-    private BitcoinSerializer.BitcoinPacketHeader header;
+    private UlordSerializer.BitcoinPacketHeader header;
 
     private Lock lock = Threading.lock("PeerSocketHandler");
 
@@ -125,7 +125,7 @@ public abstract class PeerSocketHandler extends AbstractTimeoutHandler implement
     @Override
     public int receiveBytes(ByteBuffer buff) {
         checkArgument(buff.position() == 0 &&
-                buff.capacity() >= BitcoinSerializer.BitcoinPacketHeader.HEADER_LENGTH + 4);
+                buff.capacity() >= UlordSerializer.BitcoinPacketHeader.HEADER_LENGTH + 4);
         try {
             // Repeatedly try to deserialize messages until we hit a BufferUnderflowException
             boolean firstMessage = true;

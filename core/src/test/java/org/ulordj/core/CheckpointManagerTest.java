@@ -57,7 +57,7 @@ public class CheckpointManagerTest {
     public void canReadTextualStream() throws IOException {
         expect(params.getId()).andReturn("org/ulordj/core/checkpointmanagertest/validTextualFormat");
         expect(params.getSerializer(false)).andReturn(
-                new BitcoinSerializer(params, false));
+                new UlordSerializer(params, false));
         expect(params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.CURRENT))
                 .andReturn(NetworkParameters.ProtocolVersion.CURRENT.getBitcoinProtocolVersion());
         replay(params);

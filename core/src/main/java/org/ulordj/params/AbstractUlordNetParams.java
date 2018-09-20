@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Parameters for Bitcoin-like networks.
  */
-public abstract class AbstractBitcoinNetParams extends NetworkParameters {
+public abstract class AbstractUlordNetParams extends NetworkParameters {
 
     /**
      * Scheme part for Bitcoin URIs.
@@ -40,9 +40,9 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
     public static final String BITCOIN_SCHEME = "ulord";
     //public static final int REWARD_HALVING_INTERVAL = 210000;
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractBitcoinNetParams.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractUlordNetParams.class);
 
-    public AbstractBitcoinNetParams(String id) {
+    public AbstractUlordNetParams(String id) {
         super(id);
     }
 
@@ -68,23 +68,21 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
     	final BlockStore blockStore) throws VerificationException, BlockStoreException {
 
+        if((storedPrev.getHeight() + 1) % N_POW_AVERAGING_WINDOW != 0) {
+            return;
+        }
+
         Block prev = storedPrev.getHeader();
         // Find the first block in the averaging interval
         StoredBlock cursor = blockStore.get(nextBlock.getPrevBlockHash());
         BigInteger nBitsTotal = BigInteger.ZERO;
         for(int i = 0; !cursor.getHeader().getHash().equals(this.genesisBlock.getHash())  && i < this.N_POW_AVERAGING_WINDOW; ++i) {
-            BigInteger nBitsTemp = cursor.getHeader().getDifficultyTargetAsInteger();
-            nBitsTotal = nBitsTotal.add(nBitsTemp);
+            nBitsTotal = nBitsTotal.add(cursor.getHeader().getDifficultyTargetAsInteger());
             cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
         }
 
-        if(cursor.getHeader().getHash() == genesisBlock.getHash())
-        {
-            // Check if the difficulty didn't change
-            if(nextBlock.getDifficultyTarget() != prev.getDifficultyTarget())
-                throw new VerificationException("Difficulty did not match");
+        if(cursor == null)
             return;
-        }
 
         // Find the average
         BigInteger nBitsAvg = nBitsTotal.divide(BigInteger.valueOf(this.N_POW_AVERAGING_WINDOW));
@@ -157,8 +155,8 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
     }
 
     @Override
-    public BitcoinSerializer getSerializer(boolean parseRetain) {
-        return new BitcoinSerializer(this, parseRetain);
+    public UlordSerializer getSerializer(boolean parseRetain) {
+        return new UlordSerializer(this, parseRetain);
     }
 
     @Override

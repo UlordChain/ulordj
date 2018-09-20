@@ -28,8 +28,8 @@ import org.ulordj.script.ScriptBuilder;
 import org.ulordj.script.ScriptException;
 import org.ulordj.script.ScriptPattern;
 import org.ulordj.store.*;
-import org.ulordj.uri.BitcoinURI;
-import org.ulordj.uri.BitcoinURIParseException;
+import org.ulordj.uri.UlordURI;
+import org.ulordj.uri.UlordURIParseException;
 import org.ulordj.utils.BriefLogFormatter;
 import org.ulordj.wallet.DeterministicSeed;
 import org.ulordj.wallet.DeterministicUpgradeRequiredException;
@@ -1047,7 +1047,7 @@ public class WalletTool {
                 if (location.startsWith("http")) {
                     future = PaymentSession.createFromUrl(location, verifyPki);
                 } else {
-                    BitcoinURI paymentRequestURI = new BitcoinURI(location);
+                    UlordURI paymentRequestURI = new UlordURI(location);
                     future = PaymentSession.createFromBitcoinUri(paymentRequestURI, verifyPki);
                 }
                 PaymentSession session = future.get();
@@ -1060,7 +1060,7 @@ public class WalletTool {
             } catch (PaymentProtocolException e) {
                 System.err.println("Error creating payment session " + e.getMessage());
                 System.exit(1);
-            } catch (BitcoinURIParseException e) {
+            } catch (UlordURIParseException e) {
                 System.err.println("Invalid ulord uri: " + e.getMessage());
                 System.exit(1);
             } catch (InterruptedException e) {

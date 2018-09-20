@@ -20,7 +20,7 @@ import org.ulordj.core.Address;
 import org.ulordj.core.AddressFormatException;
 import org.ulordj.core.Coin;
 import org.ulordj.core.NetworkParameters;
-import org.ulordj.params.AbstractBitcoinNetParams;
+import org.ulordj.params.AbstractUlordNetParams;
 
 import javax.annotation.Nullable;
 
@@ -76,7 +76,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Gary Rowe (BIP21 support)
  * @see <a href="https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki">BIP 0021</a>
  */
-public class BitcoinURI {
+public class UlordURI {
     // Not worth turning into an enum
     public static final String FIELD_MESSAGE = "message";
     public static final String FIELD_LABEL = "label";
@@ -85,7 +85,7 @@ public class BitcoinURI {
     public static final String FIELD_PAYMENT_REQUEST_URL = "r";
 
     /**
-     * URI for Bitcoin network. Use {@link AbstractBitcoinNetParams#BITCOIN_SCHEME} if you specifically
+     * URI for Bitcoin network. Use {@link AbstractUlordNetParams#BITCOIN_SCHEME} if you specifically
      * need Bitcoin, or use {@link NetworkParameters#getUriScheme} to get the scheme
      * from network parameters.
      */
@@ -101,12 +101,12 @@ public class BitcoinURI {
     private final Map<String, Object> parameterMap = new LinkedHashMap<>();
 
     /**
-     * Constructs a new BitcoinURI from the given string. Can be for any network.
+     * Constructs a new UlordURI from the given string. Can be for any network.
      *
      * @param uri The raw URI data to be parsed (see class comments for accepted formats)
-     * @throws BitcoinURIParseException if the URI is not syntactically or semantically valid.
+     * @throws UlordURIParseException if the URI is not syntactically or semantically valid.
      */
-    public BitcoinURI(String uri) throws BitcoinURIParseException {
+    public UlordURI(String uri) throws UlordURIParseException {
         this(null, uri);
     }
 
@@ -117,13 +117,13 @@ public class BitcoinURI {
      *               any expectation about what network the URI is for and wish to check yourself.
      * @param input The raw URI data to be parsed (see class comments for accepted formats)
      *
-     * @throws BitcoinURIParseException If the input fails Bitcoin URI syntax and semantic checks.
+     * @throws UlordURIParseException If the input fails Bitcoin URI syntax and semantic checks.
      */
-    public BitcoinURI(@Nullable NetworkParameters params, String input) throws BitcoinURIParseException {
+    public UlordURI(@Nullable NetworkParameters params, String input) throws UlordURIParseException {
         checkNotNull(input);
 
         String scheme = null == params
-            ? AbstractBitcoinNetParams.BITCOIN_SCHEME
+            ? AbstractUlordNetParams.BITCOIN_SCHEME
             : params.getUriScheme();
 
         // Attempt to form the URI (fail fast syntax checking to official standards).
@@ -131,7 +131,7 @@ public class BitcoinURI {
         try {
             uri = new URI(input);
         } catch (URISyntaxException e) {
-            throw new BitcoinURIParseException("Bad URI syntax", e);
+            throw new UlordURIParseException("Bad URI syntax", e);
         }
 
         // URI is formed as  ulord:<address>?<query parameters>
@@ -151,13 +151,13 @@ public class BitcoinURI {
         } else if (input.startsWith(correctScheme)) {
             schemeSpecificPart = input.substring(correctScheme.length());
         } else {
-            throw new BitcoinURIParseException("Unsupported URI scheme: " + uri.getScheme());
+            throw new UlordURIParseException("Unsupported URI scheme: " + uri.getScheme());
         }
 
         // Split off the address from the rest of the query parameters.
         String[] addressSplitTokens = schemeSpecificPart.split("\\?", 2);
         if (addressSplitTokens.length == 0)
-            throw new BitcoinURIParseException("No data found after the ulord: prefix");
+            throw new UlordURIParseException("No data found after the ulord: prefix");
         String addressToken = addressSplitTokens[0];  // may be empty!
 
         String[] nameValuePairTokens;
@@ -178,12 +178,12 @@ public class BitcoinURI {
                 Address address = Address.fromString(params, addressToken);
                 putWithValidation(FIELD_ADDRESS, address);
             } catch (final AddressFormatException e) {
-                throw new BitcoinURIParseException("Bad address", e);
+                throw new UlordURIParseException("Bad address", e);
             }
         }
 
         if (addressToken.isEmpty() && getPaymentRequestUrl() == null) {
-            throw new BitcoinURIParseException("No address and no r= parameter found");
+            throw new UlordURIParseException("No address and no r= parameter found");
         }
     }
 
@@ -192,15 +192,15 @@ public class BitcoinURI {
      * @param nameValuePairTokens The tokens representing the name value pairs (assumed to be
      *                            separated by '=' e.g. 'amount=0.2')
      */
-    private void parseParameters(@Nullable NetworkParameters params, String addressToken, String[] nameValuePairTokens) throws BitcoinURIParseException {
+    private void parseParameters(@Nullable NetworkParameters params, String addressToken, String[] nameValuePairTokens) throws UlordURIParseException {
         // Attempt to decode the rest of the tokens into a parameter map.
         for (String nameValuePairToken : nameValuePairTokens) {
             final int sepIndex = nameValuePairToken.indexOf('=');
             if (sepIndex == -1)
-                throw new BitcoinURIParseException("Malformed Bitcoin URI - no separator in '" +
+                throw new UlordURIParseException("Malformed Bitcoin URI - no separator in '" +
                         nameValuePairToken + "'");
             if (sepIndex == 0)
-                throw new BitcoinURIParseException("Malformed Bitcoin URI - empty name '" +
+                throw new UlordURIParseException("Malformed Bitcoin URI - empty name '" +
                         nameValuePairToken + "'");
             final String nameToken = nameValuePairToken.substring(0, sepIndex).toLowerCase(Locale.ENGLISH);
             final String valueToken = nameValuePairToken.substring(sepIndex + 1);
@@ -211,7 +211,7 @@ public class BitcoinURI {
                 try {
                     Coin amount = Coin.parseCoin(valueToken);
                     if (params != null && amount.isGreaterThan(params.getMaxMoney()))
-                        throw new BitcoinURIParseException("Max number of coins exceeded");
+                        throw new UlordURIParseException("Max number of coins exceeded");
                     if (amount.signum() < 0)
                         throw new ArithmeticException("Negative coins specified");
                     putWithValidation(FIELD_AMOUNT, amount);
@@ -246,9 +246,9 @@ public class BitcoinURI {
      * @param key The key for the map
      * @param value The value to store
      */
-    private void putWithValidation(String key, Object value) throws BitcoinURIParseException {
+    private void putWithValidation(String key, Object value) throws UlordURIParseException {
         if (parameterMap.containsKey(key)) {
-            throw new BitcoinURIParseException(String.format(Locale.US, "'%s' is duplicated, URI is invalid", key));
+            throw new UlordURIParseException(String.format(Locale.US, "'%s' is duplicated, URI is invalid", key));
         } else {
             parameterMap.put(key, value);
         }
@@ -322,7 +322,7 @@ public class BitcoinURI {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("BitcoinURI[");
+        StringBuilder builder = new StringBuilder("UlordURI[");
         boolean first = true;
         for (Map.Entry<String, Object> entry : parameterMap.entrySet()) {
             if (first) {

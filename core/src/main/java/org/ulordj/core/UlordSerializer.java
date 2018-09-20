@@ -42,8 +42,8 @@ import static org.ulordj.core.Utils.*;
  * <li>Message.bitcoinSerializeToStream() needs to be properly subclassed</li>
  * </ul>
  */
-public class BitcoinSerializer extends MessageSerializer {
-    private static final Logger log = LoggerFactory.getLogger(BitcoinSerializer.class);
+public class UlordSerializer extends MessageSerializer {
+    private static final Logger log = LoggerFactory.getLogger(UlordSerializer.class);
     private static final int COMMAND_LEN = 12;
 
     private final NetworkParameters params;
@@ -76,12 +76,12 @@ public class BitcoinSerializer extends MessageSerializer {
     }
 
     /**
-     * Constructs a BitcoinSerializer with the given behavior.
+     * Constructs a UlordSerializer with the given behavior.
      *
      * @param params           networkParams used to create Messages instances and termining packetMagic
      * @param parseRetain      retain the backing byte array of a message for fast reserialization.
      */
-    public BitcoinSerializer(NetworkParameters params, boolean parseRetain) {
+    public UlordSerializer(NetworkParameters params, boolean parseRetain) {
         this.params = params;
         this.parseRetain = parseRetain;
     }
@@ -118,7 +118,7 @@ public class BitcoinSerializer extends MessageSerializer {
     public void serialize(Message message, OutputStream out) throws IOException {
         String name = names.get(message.getClass());
         if (name == null) {
-            throw new Error("BitcoinSerializer doesn't currently know how to serialize " + message.getClass());
+            throw new Error("UlordSerializer doesn't currently know how to serialize " + message.getClass());
         }
         serialize(name, message.bitcoinSerialize(), out);
     }
@@ -159,7 +159,7 @@ public class BitcoinSerializer extends MessageSerializer {
 
     /**
      * Deserialize payload only.  You must provide a header, typically obtained by calling
-     * {@link BitcoinSerializer#deserializeHeader}.
+     * {@link UlordSerializer#deserializeHeader}.
      */
     @Override
     public Message deserializePayload(BitcoinPacketHeader header, ByteBuffer in) throws ProtocolException, BufferUnderflowException {

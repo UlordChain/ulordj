@@ -17,7 +17,7 @@
 package org.ulordj.uri;
 
 /**
- * <p>Exception to provide the following to {@link BitcoinURI}:</p>
+ * <p>Exception to provide the following to {@link UlordURI}:</p>
  * <ul>
  * <li>Provision of parsing error messages</li>
  * </ul>
@@ -27,7 +27,7 @@ package org.ulordj.uri;
  * @since 0.3.0
  *         
  */
-public class OptionalFieldValidationException extends BitcoinURIParseException {
+public class OptionalFieldValidationException extends UlordURIParseException {
 
     public OptionalFieldValidationException(String s) {
         super(s);

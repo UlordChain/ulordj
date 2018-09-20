@@ -30,7 +30,7 @@ public class SendHeadersMessage extends EmptyMessage {
     public SendHeadersMessage() {
     }
 
-    // this is needed by the BitcoinSerializer
+    // this is needed by the UlordSerializer
     public SendHeadersMessage(NetworkParameters params, byte[] payload) {
     }
 }

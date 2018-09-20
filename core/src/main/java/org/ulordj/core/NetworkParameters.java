@@ -451,7 +451,7 @@ public abstract class NetworkParameters {
     /**
      * Construct and return a custom serializer.
      */
-    public abstract BitcoinSerializer getSerializer(boolean parseRetain);
+    public abstract UlordSerializer getSerializer(boolean parseRetain);
 
     /**
      * The number of blocks in the last {@link #getMajorityWindow()} blocks

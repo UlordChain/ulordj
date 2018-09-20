@@ -26,7 +26,7 @@ public class VersionAck extends EmptyMessage {
     public VersionAck() {
     }
 
-    // this is needed by the BitcoinSerializer
+    // this is needed by the UlordSerializer
     public VersionAck(NetworkParameters params, byte[] payload) {
     }
 }

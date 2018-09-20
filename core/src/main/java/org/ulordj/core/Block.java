@@ -128,7 +128,7 @@ public class Block extends Message {
 
     /**
      * Constructs a block object from the Bitcoin wire format.
-     * @deprecated Use {@link BitcoinSerializer#makeBlock(byte[])} instead.
+     * @deprecated Use {@link UlordSerializer#makeBlock(byte[])} instead.
      */
     @Deprecated
     public Block(NetworkParameters params, byte[] payloadBytes) throws ProtocolException {

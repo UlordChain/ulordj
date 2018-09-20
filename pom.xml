@@ -45,7 +45,7 @@
 
   <name>ulordj Parent</name>
   <description>Provides the common configuration for the UlordJ modules</description>
-  <url>http://www.ulord.one/</url>
+  <url>https://github.com/UlordChain/ulordj</url>
 
   <licenses>
     <license>

@@ -37,8 +37,8 @@ import java.util.concurrent.atomic.*;
  * It is designed to run as a testnet-in-a-box network between a single bitcoind node and ulordj
  * It is not an automated unit-test because it requires a bit more set-up...read comments below
  */
-public class BitcoindComparisonTool {
-    private static final Logger log = LoggerFactory.getLogger(BitcoindComparisonTool.class);
+public class UlorddComparisonTool {
+    private static final Logger log = LoggerFactory.getLogger(UlorddComparisonTool.class);
 
     private static final NetworkParameters PARAMS = RegTestParams.get();
     private static FullPrunedBlockChain chain;
@@ -65,7 +65,7 @@ public class BitcoindComparisonTool {
         final Iterator<Block> blocks = new BlockFileLoader(PARAMS, Arrays.asList(blockFile));
 
         try {
-            H2FullPrunedBlockStore store = new H2FullPrunedBlockStore(PARAMS, args.length > 0 ? args[0] : "BitcoindComparisonTool", blockList.maximumReorgBlockCount);
+            H2FullPrunedBlockStore store = new H2FullPrunedBlockStore(PARAMS, args.length > 0 ? args[0] : "UlorddComparisonTool", blockList.maximumReorgBlockCount);
             store.resetStore();
             //store = new MemoryFullPrunedBlockStore(params, blockList.maximumReorgBlockCount);
             chain = new FullPrunedBlockChain(PARAMS, store);

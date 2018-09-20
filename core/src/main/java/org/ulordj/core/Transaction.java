@@ -269,7 +269,7 @@ public class Transaction extends ChildMessage {
     }
 
     /**
-     * Used by BitcoinSerializer.  The serializer has to calculate a hash for checksumming so to
+     * Used by UlordSerializer.  The serializer has to calculate a hash for checksumming so to
      * avoid wasting the considerable effort a set method is provided so the serializer can set it.
      *
      * No verification is performed on this hash.

@@ -20,8 +20,8 @@ import org.ulordj.crypto.TrustStoreLoader;
 import org.ulordj.protocols.payments.PaymentProtocol;
 import org.ulordj.protocols.payments.PaymentProtocolException;
 import org.ulordj.protocols.payments.PaymentSession;
-import org.ulordj.uri.BitcoinURI;
-import org.ulordj.uri.BitcoinURIParseException;
+import org.ulordj.uri.UlordURI;
+import org.ulordj.uri.UlordURIParseException;
 import org.ulord.protocols.payments.Protos;
 
 import java.io.FileInputStream;
@@ -58,7 +58,7 @@ public class PaymentProtocolTool {
             } else if ("http".equals(uri.getScheme())) {
                 session = PaymentSession.createFromUrl(arg).get();
             } else if ("ulord".equals(uri.getScheme())) {
-                BitcoinURI bcuri = new BitcoinURI(arg);
+                UlordURI bcuri = new UlordURI(arg);
                 final String paymentRequestUrl = bcuri.getPaymentRequestUrl();
                 if (paymentRequestUrl == null) {
                     System.err.println("No r= param in ulord URI");
@@ -87,7 +87,7 @@ public class PaymentProtocolTool {
             System.out.println(output);
         } catch (URISyntaxException e) {
             System.err.println("Could not parse URI: " + e.getMessage());
-        } catch (BitcoinURIParseException e) {
+        } catch (UlordURIParseException e) {
             System.err.println("Could not parse URI: " + e.getMessage());
         } catch (PaymentProtocolException.PkiVerificationException e) {
             System.err.println(e.getMessage());
