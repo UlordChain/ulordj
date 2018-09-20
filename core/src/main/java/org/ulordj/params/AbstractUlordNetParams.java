@@ -38,22 +38,20 @@ public abstract class AbstractUlordNetParams extends NetworkParameters {
      * Scheme part for Bitcoin URIs.
      */
     public static final String BITCOIN_SCHEME = "ulord";
-    //public static final int REWARD_HALVING_INTERVAL = 210000;
 
     private static final Logger log = LoggerFactory.getLogger(AbstractUlordNetParams.class);
 
+    private static BigInteger lastNBit;
+    private static BigInteger prevNBitTotal;
+
+    private static int initialSeventeen;
+
     public AbstractUlordNetParams(String id) {
         super(id);
+        lastNBit = BigInteger.ZERO;
+        prevNBitTotal = BigInteger.ZERO;
+        initialSeventeen = 1;
     }
-
-    /**
-     * Checks if we are at a reward halving point.
-     * @param height The height of the previous stored block
-     * @return If this is a reward halving point
-     */
-    //public final boolean isRewardHalvingPoint(final int height) {
-    //    return ((height + 1) % REWARD_HALVING_INTERVAL) == 0;
-    //}
 
     /**
      * Checks if we are at a difficulty transition point.
@@ -64,6 +62,11 @@ public abstract class AbstractUlordNetParams extends NetworkParameters {
         return ((height + 1) % this.getInterval()) == 0;
     }
 
+    // TODO: This function requires further improvements
+    // Currently this function can only verify blocks only if the blocks starts from genesis. We need to find a way
+    // so that the blocks can be verified from any given block for checkpoints functionality. One way is to start verifying the blocks
+    // once it has at least 17 blocks on top of a given block, this way computing average difficulty of 17 blocks and
+    // median time of 11 blocks won't be a problem
     @Override
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
     	final BlockStore blockStore) throws VerificationException, BlockStoreException {
@@ -72,7 +75,6 @@ public abstract class AbstractUlordNetParams extends NetworkParameters {
             return;
         }
 
-        Block prev = storedPrev.getHeader();
         // Find the first block in the averaging interval
         StoredBlock cursor = blockStore.get(nextBlock.getPrevBlockHash());
         BigInteger nBitsTotal = BigInteger.ZERO;

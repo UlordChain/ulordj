@@ -110,6 +110,7 @@ public class ScriptOpCodes {
     public static final int OP_ABS = 0x90;
     public static final int OP_NOT = 0x91;
     public static final int OP_0NOTEQUAL = 0x92;
+
     public static final int OP_ADD = 0x93;
     public static final int OP_SUB = 0x94;
     public static final int OP_MUL = 0x95;
@@ -117,6 +118,7 @@ public class ScriptOpCodes {
     public static final int OP_MOD = 0x97;
     public static final int OP_LSHIFT = 0x98;
     public static final int OP_RSHIFT = 0x99;
+
     public static final int OP_BOOLAND = 0x9a;
     public static final int OP_BOOLOR = 0x9b;
     public static final int OP_NUMEQUAL = 0x9c;
@@ -128,6 +130,7 @@ public class ScriptOpCodes {
     public static final int OP_GREATERTHANOREQUAL = 0xa2;
     public static final int OP_MIN = 0xa3;
     public static final int OP_MAX = 0xa4;
+
     public static final int OP_WITHIN = 0xa5;
 
     // crypto

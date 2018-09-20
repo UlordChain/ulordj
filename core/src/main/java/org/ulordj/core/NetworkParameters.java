@@ -119,14 +119,17 @@ public abstract class NetworkParameters {
         try {
             // A script containing the difficulty bits and the following message:
             //
-            //   "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
+            // "Change the World with Us. 22/May/2018, 00:00:00, GMT"
             if(n.id == ID_MAINNET || n.id == ID_REGTEST) {
                 byte[] bytes = Utils.HEX.decode
-                        ("04ffff001d01040b6162726163616461627261");
+                        ("04ffff001d0104344368616e67652074686520576f726c6420776974682055732e2032322f4d61792f323031382c2030303a30303a30302c20474d54");
                 t.addInput(new TransactionInput(n, t, bytes));
                 Script.writeBytes(scriptPubKeyBytes, Utils.HEX.decode
                         ("041c508f27e982c369486c0f1a42779208b3f5dc96c21a2af6004cb18d1529f42182425db1e1632dc6e73ff687592e148569022cee52b4b4eb10e8bb11bd927ec0"));
             }else{
+                // A script containing the difficulty bits and the following message:
+                //
+                // "ulord hold value testnet."
                 byte[] bytes = Utils.HEX.decode
                         ("04ffff001d010419756c6f726420686f6c642076616c756520746573746e65742e");
                 t.addInput(new TransactionInput(n, t, bytes));
@@ -135,12 +138,12 @@ public abstract class NetworkParameters {
             }
             scriptPubKeyBytes.write(ScriptOpCodes.OP_CHECKSIG);
             t.addOutput(new TransactionOutput(n, t, ONE_COIN, scriptPubKeyBytes.toByteArray()));
+            genesisBlock.addTransaction(t);
+            return genesisBlock;
         } catch (Exception e) {
             // Cannot happen.
             throw new RuntimeException(e);
         }
-        genesisBlock.addTransaction(t);
-        return genesisBlock;
     }
 
     public static final int TARGET_TIMESPAN = 24 * 60 * 60;  // 1 day per difficulty cycle, on average.
@@ -150,8 +153,8 @@ public abstract class NetworkParameters {
     /** Used to validate and update block's difficulty*/
     protected final int N_POW_AVERAGING_WINDOW = 17;                              // nPowAveragingWindow = 17 chainparams.cpp
     protected int averagingWindowTimespan = N_POW_AVERAGING_WINDOW * TARGET_SPACING;
-    protected int nPowMaxAdjustDown = 32;
-    protected int nPowMaxAdjustUp = 48;
+    protected int nPowMaxAdjustDown;
+    protected int nPowMaxAdjustUp;
     protected int minActualTimespan;
     protected int maxActualTimespan;
 
@@ -536,14 +539,14 @@ public abstract class NetworkParameters {
         WITNESS_VERSION(70103),
         CURRENT(70206);
 
-        private final int bitcoinProtocol;
+        private final int ulordProtocol;
 
-        ProtocolVersion(final int bitcoinProtocol) {
-            this.bitcoinProtocol = bitcoinProtocol;
+        ProtocolVersion(final int ulordProtocol) {
+            this.ulordProtocol = ulordProtocol;
         }
 
         public int getBitcoinProtocolVersion() {
-            return bitcoinProtocol;
+            return ulordProtocol;
         }
     }
 }
